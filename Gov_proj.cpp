@@ -15,8 +15,6 @@ void login();
 void IncorrectLogin();
 
 int main(){
-    system("Color 03"); 
-
     Start_Menu();
 
     return 0;
@@ -24,9 +22,8 @@ int main(){
 
 void Start_Menu(){ // Display Starting Menu
     system("cls");
-    
+    system("color 03");
     int option;
-
     cout << "=================Program  Name=================\n"; // Name of Program
     cout << "[1] LOGIN\n";
     cout << "[2] REGISTRATION\n";
@@ -41,10 +38,19 @@ void Start_Menu(){ // Display Starting Menu
         case 2:
             registration();
             break;
+        case 3:
+            return;
+        default:
+            system("color 04");
+            cout << "\nPlease enter a valid option!\n";
+            system("color 03");
+            Start_Menu();
     }
 }
 
 void Main_Menu(){ // Main Menu Display
+    system("cls");
+    system("color 03");
     int option;
     cout << "[1] TAX CALCULATOR\n";
     cout << "[2] TAX PAYMENT\n";
@@ -52,10 +58,16 @@ void Main_Menu(){ // Main Menu Display
     cout << "[4] LOG-OUT\n";
     cout << "Enter option: ";
     cin >> option;
+    switch(option){
+        case 4:
+            Start_Menu();
+            break;
+    }
 }
 
 void registration(){
     system("cls"); // clears system terminal
+    system("color 04");
     ofstream UsernameInput("Usernames.txt", ios::app); // opens Usernames text file to append user input 
 
     string Register_Username, RegisterPassword;
@@ -103,12 +115,13 @@ void registration(){
             cout << "Ensure that your password contains a capital letter, atleast one number, and no white spaces;\n";
         }
     }while(!valid);
-
     PasswordInput.close();
+    Start_Menu();
 }
 
 void login(){ // Log-in Function
     system("cls");
+    system("color 03");
     string UserName, UserPassword, UserComparison, PasswordComparison, UserData, PasswordData;
     bool found = false;
 
@@ -131,9 +144,9 @@ void login(){ // Log-in Function
         }
     }  
     if (!found){
+        system("cls");
         system("color 04");
         cout << "\nUsername/Password not found!";
-        system("color 03");
         IncorrectLogin();
     }
     else if(found){
@@ -143,7 +156,6 @@ void login(){ // Log-in Function
 
 void IncorrectLogin(){ // If the user enters non-existent/incorrect credentials
     int option;
-
     cout <<"\n[1] Try Again?";
     cout <<"\n[2] Main Menu";
     cout <<"\nEnter choice: ";
@@ -157,9 +169,9 @@ void IncorrectLogin(){ // If the user enters non-existent/incorrect credentials
             Start_Menu();
             break;
         default:
+            system("cls");
             system("color 04");
             cout << "\nPlease enter a valid option!\n";
-            system("color 03");
             IncorrectLogin();
     }
 }
