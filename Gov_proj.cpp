@@ -10,6 +10,7 @@
 using namespace std;
 
 int tin;
+double monthly1Salary = 0;
 
 void Start_Menu();
 void Main_Menu();
@@ -19,13 +20,19 @@ void IncorrectLogin();
 void register_profile();
 void View_Profile();
 void TIN();
+double thirteenmonthpay(double salary);
+double annual_salary(double salary);
+double taxable_income(double ms);	
+double tax_incomeTable(int choose, double ms, double thirteenmonthpay);
+double regular_Tax(double monthly1Salary, double tmp, double TI, double AS);
 
 struct Profile{
 	string name, address, phone_number;
-	double monthly_salary;
+	double monthly1salary;
 };
 
 int main(){
+
     Start_Menu();
 
     return 0;
@@ -70,6 +77,9 @@ void Main_Menu(){ // Main Menu Display
     cout << "Enter option: ";
     cin >> option;
     switch(option){
+        case 1:
+            regular_Tax(monthly1Salary, 0, 0, 0);
+            break;
         case 2:
             TIN();
             break;
@@ -207,9 +217,9 @@ void register_profile(){
 	getline(cin, profile.phone_number);
 	
 	cout << "Enter your Monthly Salary: ";
-	cin >> profile.monthly_salary;
+	cin >> profile.monthly1salary;
 	
-	profile_input << profile.name <<endl<< profile.address <<endl<< profile.phone_number <<endl<< profile.monthly_salary<<endl;
+	profile_input << profile.name <<endl<< profile.address <<endl<< profile.phone_number <<endl<< profile.monthly1salary<<endl;
 	profile_input.close();
     Main_Menu();
 }
@@ -250,4 +260,125 @@ void TIN () //This function will display the TIN number and the details of the u
 
 	cout << "Your TIN number is: " << tin1 << "-" << tin2 << "-" << tin3 << "-" << "00000" << endl;
 	cout << "Please proceed to your nearest BIR office for further instructions." << endl;	
+}
+double thirteenmonthpay(double salary){
+    if(salary > 90000)
+    {
+        double monthly_salary = salary - 90000;
+        return monthly_salary;
+    }
+    else
+    {
+        double monthly_salary = 0;
+        return monthly_salary;
+    }
+    return salary;
+}
+double annual_salary(double salary){
+    int x = salary * 12;
+    return x;
+}
+double taxable_income(double ms)
+{
+    const double sss = 1350;
+    const double pagIbig = 100;
+    const double philHealth = ms * 0.025;
+    double monthlyTax = ms - (sss + pagIbig + philHealth);
+    return monthlyTax;
+}
+double tax_incomeTable(int choose, double ms, double thirteenmonthpay) //This function represents the latest tax table from BIR
+{
+    double mS = ms;
+    double MS = ms * 12 + thirteenmonthpay;
+    switch(choose)
+    {
+        case 1:
+            cout<<"Your monthly tax is: ";
+            if (mS>=666667)
+            {
+                double x = ((ms - 666667) * 0.35) + 200833.33;
+                return x;
+            }
+            else if (mS<=666666 && mS>=166667)
+            {
+                double x = ((ms - 166667 ) * 0.30) + 40833.33;
+                return x;
+            }
+            else if (mS<=166667 && mS>= 66667)
+            {
+                double x = ((ms - 66667) * 0.25) + 10833.33;
+                return x;
+            }
+            else if (mS<=66666 && mS>=33333)
+            {
+                double x = ((ms - 66666) * 0.20) + 2500;
+                return x;
+            }   
+            else if (mS<=33332 && mS>=20833)
+            {
+                double x = ((ms - 33332) * 0.15);
+                return x;
+            }
+            else 
+            {
+                cout<<"No withholding tax.";
+                return 0;
+            }
+        case 2:
+            cout<<"Your annual tax is: " << endl;
+            if (MS>=8000000)
+            {
+                double x = ((MS - 8000000) * 0.35) + 2410000;
+                return x;
+            }
+            else if (MS<=8000000 && MS>=2000000)
+            {
+                double x = ((MS - 2000000) * 0.32) + 490000;
+                return x;
+            }
+            else if (MS<=2000000 && MS>=800000)
+            {
+                double x = ((MS - 800000) * 0.30) + 130000;
+                return x;
+            }
+            else if (MS<=800000 && MS>=400000)
+            {
+                double x = ((MS - 400000) * 0.25) + 30000;
+                return x;
+            }
+            else if (MS<=400000 && MS>=250000)
+            {
+                double x = ((MS - 250000) * 0.20);
+                return x;
+            }
+            else
+            {
+                cout<<"No withholding tax.";
+                return 0;
+            }
+    }
+    return 0;
+}
+double regular_Tax(double monthly1Salary, double tmp, double TI, double AS)
+{
+    int choice;
+    cout << "Choice:" << endl; // Asks for user choice
+	cout << "1 - Monthly Tax" << endl;
+	cout << "2 - Annual  Tax" << endl;
+	do
+	{
+		cout << "Enter your choice: ";
+		cin >> choice;
+	} while (choice != 1 && choice != 2);
+	tmp = thirteenmonthpay(monthly1Salary);
+				
+	TI = taxable_income(monthly1Salary);
+				
+	AS = annual_salary(monthly1Salary);
+				
+	cout << "\n"; //Displays output of the entire program
+	cout << "Monthly Salary: " << monthly1Salary << endl;
+	cout << "Your taxable monthly income is: " << TI << endl;
+	cout << "Your annual salary: " << AS << endl;
+	cout << tax_incomeTable(choice, monthly1Salary, tmp) << endl;
 }
