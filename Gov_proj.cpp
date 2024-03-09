@@ -9,6 +9,8 @@
 #include <stdlib.h>
 using namespace std;
 
+int tin;
+
 void Start_Menu();
 void Main_Menu();
 void registration();
@@ -16,6 +18,7 @@ void login();
 void IncorrectLogin();
 void register_profile();
 void View_Profile();
+void TIN();
 
 struct Profile{
 	string name, address, phone_number;
@@ -61,12 +64,15 @@ void Main_Menu(){ // Main Menu Display
     system("color 03");
     int option;
     cout << "[1] TAX CALCULATOR\n";
-    cout << "[2] TAX PAYMENT\n";
+    cout << "[2] Generate Tin\n";
     cout << "[3] VIEW PROFILE\n";
     cout << "[4] LOG-OUT\n";
     cout << "Enter option: ";
     cin >> option;
     switch(option){
+        case 2:
+            TIN();
+            break;
         case 3:
             View_Profile();
             break;
@@ -234,50 +240,14 @@ void View_Profile(){
 	profile_output.close();     
 }
 
-void TIN (int tin, string fullName, int age, string bday, string compAddress) //This function will display the TIN number and the details of the user
+void TIN () //This function will display the TIN number and the details of the user
 {
-	srand(time(0));
+	int tin;
+    srand(time(0));
 	int tin1 = rand() % 1000 + 1; //Generates a random number for the TIN number
 	int tin2 = rand() % 1000 + 1;
 	int tin3 = rand() % 1000 + 1;
 
 	cout << "Your TIN number is: " << tin1 << "-" << tin2 << "-" << tin3 << "-" << "00000" << endl;
-	cout << "Your full name is :" << fullName << endl;
-	cout << "Your age is: " << age << endl;
-	cout << "Your birthday is: " << bday << endl;
-	cout << "Your complete address is: " << compAddress << endl;
 	cout << "Please proceed to your nearest BIR office for further instructions." << endl;	
-}
-
-void TINMenu (string fullName, int age, string bday, string compAddress, char prompt2) //This function will ask for the details of the user
-{
-	cout << "Welcome to the TIN Number Generator, please proceed with the required inputs below." << endl;
-	cout << "Enter your full name: ";
-	getline(cin,fullName);
-	cout << "What is your age?: ";
-	cin >> age;
-	cout << "When is your birthday?: ";
-	cin >> bday;
-	cout << "What is your complete address?: ";
-	cin >> compAddress;
-	cout<<"Please double check your inputs before proceeding." << endl;
-	cout <<"Are you sure?" << endl;
-	cout <<"Y - Yes" << endl;
-	cout <<"N - No" << endl;
-	cin >> prompt2;
-	if (prompt2 == 'Y' || prompt2 == 'y')
-	{
-		TIN(tin, fullName, age, bday, compAddress);
-	}
-	else if (prompt2 == 'N' || prompt2 == 'n')
-	{
-		system("clear");
-		cout << "Please try again: \n" << endl;
-		cin.ignore();
-		TINMenu(fullName, age, bday, compAddress, prompt2);
-	}
-	else
-	{
-		cout << "Invalid input." << endl;
-	}
 }
