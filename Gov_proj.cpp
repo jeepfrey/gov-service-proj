@@ -4,7 +4,6 @@
 #include <iostream> 
 #include <fstream>
 #include <sstream>
-#include <windows.h>
 #include <string>
 #include <cctype>
 #include <stdlib.h>
@@ -15,6 +14,13 @@ void Main_Menu();
 void registration();
 void login();
 void IncorrectLogin();
+void register_profile();
+void View_Profile();
+
+struct Profile{
+	string name, address, phone_number;
+	double monthly_salary;
+};
 
 int main(){
     Start_Menu();
@@ -23,7 +29,7 @@ int main(){
 }
 
 void Start_Menu(){ // Display Starting Menu
-    system("cls");
+    system("clear");
     system("color 03");
     int option;
     cout << "=================Program  Name=================\n"; // Name of Program
@@ -51,7 +57,7 @@ void Start_Menu(){ // Display Starting Menu
 }
 
 void Main_Menu(){ // Main Menu Display
-    system("cls");
+    system("clear");
     system("color 03");
     int option;
     cout << "[1] TAX CALCULATOR\n";
@@ -61,6 +67,9 @@ void Main_Menu(){ // Main Menu Display
     cout << "Enter option: ";
     cin >> option;
     switch(option){
+        case 3:
+            View_Profile();
+            break;
         case 4:
             Start_Menu();
             break;
@@ -68,7 +77,7 @@ void Main_Menu(){ // Main Menu Display
 }
 
 void registration(){
-    system("cls"); // clears system terminal
+    system("clear"); // clears system terminal
     system("color 04");
     ofstream UsernameInput("Usernames.txt", ios::app); // opens Usernames text file to append user input 
 
@@ -105,7 +114,7 @@ void registration(){
             }
         } // password turns valid if it meets criteria
         if (Capital & Number & !WhiteSpace){
-            system("cls");
+            system("clear");
             PasswordInput << RegisterPassword <<'\n';
             system("Color 03");
             cout << "\nSuccessfully registered " << Register_Username <<'!'<<endl;
@@ -118,11 +127,11 @@ void registration(){
         }
     }while(!valid);
     PasswordInput.close();
-    Start_Menu();
+    register_profile();
 }
 
 void login(){ // Log-in Function
-    system("cls");
+    system("clear");
     system("color 03");
     string UserName, UserPassword, UserComparison, PasswordComparison, UserData, PasswordData;
     bool found = false;
@@ -139,14 +148,14 @@ void login(){ // Log-in Function
         istringstream issUser(UserData), issPass(PasswordData); 
         while(issUser >> UserComparison && issPass >> PasswordComparison){ 
             if (UserName == UserComparison && UserPassword == PasswordComparison){ // Compares user input with text file data base
-                system("cls");
+                system("clear");
                 cout << "Welcome " << UserName <<"!"<<endl;
                 found = true;
             }
         }
     }  
     if (!found){
-        system("cls");
+        system("clear");
         system("color 04");
         cout << "\nUsername/Password not found!";
         IncorrectLogin();
@@ -171,9 +180,104 @@ void IncorrectLogin(){ // If the user enters non-existent/incorrect credentials
             Start_Menu();
             break;
         default:
-            system("cls");
+            system("clear");
             system("color 04");
             cout << "\nPlease enter a valid option!\n";
             IncorrectLogin();
     }
+}
+void register_profile(){
+	Profile profile;
+	string user_input;
+	ofstream profile_input("profiles.txt", ios::app);
+	
+	cout << "Enter Your name: ";
+	getline(cin, profile.name);
+	
+	cout << "Enter your Address: ";
+	getline(cin, profile.address);
+	
+	cout << "Enter your Phone Number: ";
+	getline(cin, profile.phone_number);
+	
+	cout << "Enter your Monthly Salary: ";
+	cin >> profile.monthly_salary;
+	
+	profile_input << profile.name <<endl<< profile.address <<endl<< profile.phone_number <<endl<< profile.monthly_salary<<endl;
+	profile_input.close();
+    Main_Menu();
+}
+
+void View_Profile(){
+    system("clear");
+	string output, tempfile2;
+    int count = 0;
+	ifstream profile_output("profiles.txt");
+	while(getline(profile_output,output)){
+        switch(count){
+            case 0:
+            cout << "Name: ";
+            break;
+            case 1:
+            cout << "Address: ";
+            break;
+            case 2:
+            cout << "Phone Number: ";
+            break;
+            case 3:
+            cout << "Monthly Salary: ";
+            break;
+        }
+        cout << output << endl;
+        count ++;
+	}
+	profile_output.close();     
+}
+
+void TIN (int tin, string fullName, int age, string bday, string compAddress) //This function will display the TIN number and the details of the user
+{
+	srand(time(0));
+	int tin1 = rand() % 1000 + 1; //Generates a random number for the TIN number
+	int tin2 = rand() % 1000 + 1;
+	int tin3 = rand() % 1000 + 1;
+
+	cout << "Your TIN number is: " << tin1 << "-" << tin2 << "-" << tin3 << "-" << "00000" << endl;
+	cout << "Your full name is :" << fullName << endl;
+	cout << "Your age is: " << age << endl;
+	cout << "Your birthday is: " << bday << endl;
+	cout << "Your complete address is: " << compAddress << endl;
+	cout << "Please proceed to your nearest BIR office for further instructions." << endl;	
+}
+
+void TINMenu (string fullName, int age, string bday, string compAddress, char prompt2) //This function will ask for the details of the user
+{
+	cout << "Welcome to the TIN Number Generator, please proceed with the required inputs below." << endl;
+	cout << "Enter your full name: ";
+	getline(cin,fullName);
+	cout << "What is your age?: ";
+	cin >> age;
+	cout << "When is your birthday?: ";
+	cin >> bday;
+	cout << "What is your complete address?: ";
+	cin >> compAddress;
+	cout<<"Please double check your inputs before proceeding." << endl;
+	cout <<"Are you sure?" << endl;
+	cout <<"Y - Yes" << endl;
+	cout <<"N - No" << endl;
+	cin >> prompt2;
+	if (prompt2 == 'Y' || prompt2 == 'y')
+	{
+		TIN(tin, fullName, age, bday, compAddress);
+	}
+	else if (prompt2 == 'N' || prompt2 == 'n')
+	{
+		system("clear");
+		cout << "Please try again: \n" << endl;
+		cin.ignore();
+		TINMenu(fullName, age, bday, compAddress, prompt2);
+	}
+	else
+	{
+		cout << "Invalid input." << endl;
+	}
 }
