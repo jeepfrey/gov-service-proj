@@ -381,4 +381,5 @@ double regular_Tax(double monthly1Salary, double tmp, double TI, double AS)
 	cout << "Your taxable monthly income is: " << TI << endl;
 	cout << "Your annual salary: " << AS << endl;
 	cout << tax_incomeTable(choice, monthly1Salary, tmp) << endl;
+    cout << "Tangina mo";
 }
