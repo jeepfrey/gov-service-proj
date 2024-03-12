@@ -5,13 +5,17 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <sstream>
+#include <limits>
 #include <cctype>
 #include <stdlib.h>
+#include <algorithm>
 using namespace std;
 
 int tin;
 double monthly1Salary = 0;
 
+bool validSalary(const string& input);
 void Start_Menu();
 void Main_Menu();
 void registration();
@@ -39,7 +43,7 @@ int main(){
 }
 
 void Start_Menu(){ // Display Starting Menu
-    system("clear");
+    system("cls");
     system("color 03");
     int option;
     cout << "=================Program  Name=================\n"; // Name of Program
@@ -67,7 +71,7 @@ void Start_Menu(){ // Display Starting Menu
 }
 
 void Main_Menu(){ // Main Menu Display
-    system("clear");
+    system("cls");
     system("color 03");
     int option;
     cout << "[1] TAX CALCULATOR\n";
@@ -93,14 +97,14 @@ void Main_Menu(){ // Main Menu Display
 }
 
 void registration(){
-    system("clear"); // clears system terminal
+    system("cls"); // clss system terminal
     system("color 04");
     ofstream UsernameInput("Usernames.txt", ios::app); // opens Usernames text file to append user input 
 
     string Register_Username, RegisterPassword;
     bool valid = false;
 
-    cin.ignore(1, '\n'); // clears input buffer/queue
+    cin.ignore(1, '\n'); // clss input buffer/queue
     cout << "Register Username: ";
     getline(cin, Register_Username); // Registration for username
 
@@ -130,7 +134,7 @@ void registration(){
             }
         } // password turns valid if it meets criteria
         if (Capital & Number & !WhiteSpace){
-            system("clear");
+            system("cls");
             PasswordInput << RegisterPassword <<'\n';
             system("Color 03");
             cout << "\nSuccessfully registered " << Register_Username <<'!'<<endl;
@@ -147,7 +151,7 @@ void registration(){
 }
 
 void login(){ // Log-in Function
-    system("clear");
+    system("cls");
     system("color 03");
     string UserName, UserPassword, UserComparison, PasswordComparison, UserData, PasswordData;
     bool found = false;
@@ -164,14 +168,14 @@ void login(){ // Log-in Function
         istringstream issUser(UserData), issPass(PasswordData); 
         while(issUser >> UserComparison && issPass >> PasswordComparison){ 
             if (UserName == UserComparison && UserPassword == PasswordComparison){ // Compares user input with text file data base
-                system("clear");
+                system("cls");
                 cout << "Welcome " << UserName <<"!"<<endl;
                 found = true;
             }
         }
     }  
     if (!found){
-        system("clear");
+        system("cls");
         system("color 04");
         cout << "\nUsername/Password not found!";
         IncorrectLogin();
@@ -196,15 +200,34 @@ void IncorrectLogin(){ // If the user enters non-existent/incorrect credentials
             Start_Menu();
             break;
         default:
-            system("clear");
+            system("cls");
             system("color 04");
             cout << "\nPlease enter a valid option!\n";
             IncorrectLogin();
     }
 }
+bool ValidSalary(const string& input) //This function checks if the input is a valid number
+{   
+    if (input.empty())
+    {
+        return false;
+    }
+
+    #include <algorithm>
+
+    for (const char& ch : input) {
+        if (!(isdigit(ch) || ch == '!' || ch == '@' || ch == '#' || ch == '$' || ch == '%' || ch == '^' || ch == '&' || ch == '*' || ch == '(' || ch == ')' || ch == '-' || ch == '+' || ch == '=' || ch == '_' || ch == '[' || ch == ']' || ch == '{' || ch == '}' || ch == ':' || ch ==';' || ch == '"' || ch == '<' || ch == '>' || ch == '?' || ch == '/' || ch == '|' || ch == '\\' || ch == ',' || ch == '.' || ch == '~' || ch == '`' || ch ==' ')) {
+            return false;
+        }
+      
+    }
+
+    size_t decimalCount = count(input.begin(), input.end(), '.');
+    return decimalCount <= 1;
+}
 void register_profile(){
 	Profile profile;
-	string user_input;
+	string user_Input;
 	ofstream profile_input("profiles.txt", ios::app);
 	
 	cout << "Enter Your name: ";
@@ -216,8 +239,22 @@ void register_profile(){
 	cout << "Enter your Phone Number: ";
 	getline(cin, profile.phone_number);
 	
-	cout << "Enter your Monthly Salary: ";
-	cin >> profile.monthly1salary;
+    do {
+        cout << "Enter your Monthly Salary: ";
+        getline(cin, user_Input);
+
+        if (!ValidSalary(user_Input))
+        {
+            cout << "Invalid input! Please enter a valid number!" << endl;
+        }
+        else
+        {
+            istringstream(user_Input) >> profile.monthly1salary;
+            break;
+        }
+
+    } while (true);
+
 	
 	profile_input << profile.name <<endl<< profile.address <<endl<< profile.phone_number <<endl<< profile.monthly1salary<<endl;
 	profile_input.close();
@@ -225,7 +262,7 @@ void register_profile(){
 }
 
 void View_Profile(){
-    system("clear");
+    system("cls");
 	string output, tempfile2;
     int count = 0;
 	ifstream profile_output("profiles.txt");
@@ -381,5 +418,4 @@ double regular_Tax(double monthly1Salary, double tmp, double TI, double AS)
 	cout << "Your taxable monthly income is: " << TI << endl;
 	cout << "Your annual salary: " << AS << endl;
 	cout << tax_incomeTable(choice, monthly1Salary, tmp) << endl;
-    cout << "Tangina mo";
 }

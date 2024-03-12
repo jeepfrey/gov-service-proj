@@ -1,3 +1,9 @@
 elijah
 elijah
 jeepfrey
+cd "f:\FINAL PROJECT\gov-service-proj\" ; if ($?) { g++ Gov_proj.cpp -o Gov_proj } ; if ($?) { .\Gov_proj }
+jeepfrey
+jeepfreyy
+jeff
+jep
+yes
